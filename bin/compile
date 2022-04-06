@@ -1,0 +1,46 @@
+#!/bin/env python3
+
+import argparse
+from pathlib import Path
+import shutil
+import os
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('build_dir')
+parser.add_argument('cache_dir')
+parser.add_argument('env_dir')
+
+args = parser.parse_args()
+
+build_dir = Path(args.build_dir).resolve()
+cache_dir = Path(args.cache_dir).resolve()
+env_dir = Path(args.env_dir).resolve()
+server_dir = Path(build_dir / "server").resolve()
+client_dir = Path(build_dir / "client").resolve()
+
+print(os.listdir(build_dir))
+
+print(f"Build dir: {build_dir}")
+print(f"Cache dir: {cache_dir}")
+print(f"Env dir: {env_dir}")
+print(f"Server dir: {server_dir}")
+print(f"Client dir: {client_dir}")
+
+src = client_dir
+dst = server_dir / "client"
+print(f"Copy {src} -> {dst}")
+shutil.copytree(src, dst)
+print(os.listdir(server_dir))
+
+tmp_dir = cache_dir / "mytmp"
+cache_dir.mkdir(exist_ok=True)
+print(f"Copy {server_dir} -> {tmp_dir}")
+shutil.copytree(server_dir, tmp_dir)
+shutil.rmtree(build_dir)
+
+print(f"Copy {tmp_dir} -> {build_dir}")
+shutil.copytree(tmp_dir, build_dir)
+shutil.rmtree(tmp_dir)
+print(os.listdir(build_dir))
+
+exit(0)

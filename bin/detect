@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "Money App buildpack. Build dir: $0"
+exit 0
